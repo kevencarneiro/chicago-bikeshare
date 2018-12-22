@@ -191,7 +191,7 @@ input("Aperte Enter para continuar...")
 # TAREFA 7
 
 
-def plot_single_column_bar(data_list, x_label, column_index, y_label="Quantidade"):
+def plot_single_column_bar(data_list, x_label, column_index, y_label="Quantidade", limit=None):
     """
     Exibe um gráfico na tela de acordo com a coluna especificada
     Argumentos:
@@ -199,13 +199,16 @@ def plot_single_column_bar(data_list, x_label, column_index, y_label="Quantidade
       x_label: O nome da coluna que será exibida.
       column_index: O índice na lista que contém os dados que devem ser exibidos
       y_label: O nome da legenda
+      limit: Limite de chaves (por maiores valores)
     """
     column_list = column_to_list(data_list, column_index)
     count_items = dict([(x, column_list.count(x)) for x in set(column_list)])
-    print(set(column_list))
+    if limit:
+        count_items = sorted(count_items.items(), key=lambda x: x[1], reverse=True)[:limit]
+        count_items = dict(count_items)
     y_pos = list(range(len(count_items)))
     plt.bar(y_pos, count_items.values())
-    plt.xticks(y_pos, count_items.keys())
+    plt.xticks(y_pos, count_items.keys(), rotation=90)
     plt.xlabel(x_label)
     plt.ylabel(y_label)
     plt.title('{} por {}'.format(y_label, x_label))
@@ -217,6 +220,10 @@ plot_single_column_bar(data_list, 'Tipo de Usuário', -3)
 
 input("Aperte Enter para continuar...")
 
+# Exploração de dados adicionais
+print("\nDados sobre as estações de destino")
+plot_single_column_bar(data_list, "Destino", 4, "Quantidade de passageiros", 5)
+input("Aperte Enter para continuar...")
 
 # TAREFA 8
 male, female = count_gender(data_list)
